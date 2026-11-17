@@ -1,0 +1,59 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '4.1.2'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.dsin'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    // 웹, DB, 검증, 화면
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // MySQL
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // 앱 실행 시 compose.yaml의 MySQL 자동 실행
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // 테스트 스타터 (spring-boot-starter-test는 여기 포함됨)
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+
+    // 테스트용 실제 MySQL 컨테이너
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:testcontainers-junit-jupiter'
+    testImplementation 'org.testcontainers:testcontainers-mysql'
+
+    // API 테스트
+    testImplementation 'io.rest-assured:rest-assured'
+
+    // 테스트 데이터 생성
+    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.1.17'
+    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-jakarta-validation:1.1.17'
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+tasks.named('test') {
+	useJUnitPlatform()
+}
